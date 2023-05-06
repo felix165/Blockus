@@ -11,9 +11,13 @@ public class SoundManager : MonoBehaviour
     public static SoundManager Instance;
 
     public Sound[] musicSound, sfxSound;
-    public AudioSource musicSource, sfxSource;
+    public AudioSource musicSource, sfxSource, bgSoundSource;
 
-    public static float volume = 100;
+    public static float bgmVolume = 1;
+    public static float sfxVolume = 1;
+
+    private float deltaTime =5f;
+    private float bgSoundDelay = 15f;
     
     
     public void PlayMusic (string name)
@@ -23,11 +27,11 @@ public class SoundManager : MonoBehaviour
 
         if (s != null)
         {
+            Debug.Log(name);
             musicSource.clip = s.clip;
             musicSource.loop = true;
            
-            musicSource.Play();
-            
+            musicSource.Play();            
         }
         else
         {
@@ -41,9 +45,26 @@ public class SoundManager : MonoBehaviour
 
         if (s != null)
         {
+            Debug.Log(name);
             sfxSource.clip = s.clip;
             sfxSource.Play();
             
+        }
+        else
+        {
+            Debug.Log("Sound Not Found");
+        }
+    }
+    public void PlayBGSound(string name)
+    {
+        Sound s = Array.Find(sfxSound, x => x.name == name);
+
+        if (s != null)
+        {
+            Debug.Log(name);
+            bgSoundSource.clip = s.clip;
+            bgSoundSource.Play();
+
         }
         else
         {
@@ -72,9 +93,21 @@ public class SoundManager : MonoBehaviour
 
     private void Update()
     {
-        musicSource.volume= volume;
-        sfxSource.volume= volume;
+        musicSource.volume = bgmVolume;
+        sfxSource.volume = sfxVolume;
+        bgSoundSource.volume = bgmVolume;
+
+        if(deltaTime <= 0)
+        {
+            PlayBGSound("SeaSound");
+            deltaTime = bgSoundDelay;
+        }
+        else
+        {
+            deltaTime -= Time.deltaTime;
+        }
     }
+
 
 
 

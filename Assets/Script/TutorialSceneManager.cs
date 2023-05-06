@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class TutorialSceneManager : MonoBehaviour
 {
-    
+    public static TutorialSceneManager Instance;
     public Sprite[] tutorialImage;
     public SpriteRenderer BG;
     int curPage = 0;
@@ -37,7 +37,7 @@ public class TutorialSceneManager : MonoBehaviour
     public void Prev()
     {
         int curIndex = Array.IndexOf(tutorialImage, BG.sprite);
-        if (curIndex <= 0)
+        if (curIndex < 0)
         {
             Debug.Log("Tutorial - IndexNotFound");
         }
@@ -53,6 +53,7 @@ public class TutorialSceneManager : MonoBehaviour
     }
     public void Done()
     {
+
         GameManager.Instance.NewGame();
     }
 
