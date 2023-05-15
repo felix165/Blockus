@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8283808470608363316}
-  - component: {fileID: 6019576243519167905}
+  - component: {fileID: 712433653}
   m_Layer: 0
   m_Name: ShowedGrid
   m_TagString: Untagged
@@ -24,7 +24,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7586407580659607046}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6019576243519167905
+--- !u!114 &712433653
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,9 +41,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7586407580659607046}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 391301564f296074582a8d623b6548d7, type: 3}
+  m_Script: {fileID: 11500000, guid: 9931dd229a95270458aeb7800f4cdea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineObj: {fileID: 2494931718843644581, guid: c8c7cd073bd553b43b9afd4f17eb41c0, type: 3}
-  range: {x: 1.5, y: 1.5}
-  count: {x: 6, y: 6}
+  lineObj: {fileID: 2494931718843644581, guid: 44053cab7a33e5a4c82cb9a2e22b0fc9, type: 3}
+  range: {x: 0.7, y: 0.7}
+  count: {x: 13, y: 13}
