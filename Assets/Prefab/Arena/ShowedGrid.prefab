@@ -45,5 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineObj: {fileID: 2494931718843644581, guid: 44053cab7a33e5a4c82cb9a2e22b0fc9, type: 3}
-  range: {x: 0.7, y: 0.7}
+  range: {x: 0.65, y: 0.65}
   count: {x: 13, y: 13}

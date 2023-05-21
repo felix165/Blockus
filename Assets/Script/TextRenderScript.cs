@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class TextRenderScript : MonoBehaviour
 {
@@ -10,17 +9,23 @@ public class TextRenderScript : MonoBehaviour
     {
         curTimeLimit,
         turnCounter,
+        username1,
+        username2,
+        turnState,
+        winner,
+        scorePlayer1,
+        scorePlayer2,
 
     }
 
     public Opsi option;
-    public Text textObj;
+    private TMP_Text textObj;
 
 
     // Start is called before the first frame update
     void Start()
     {
-
+        textObj= GetComponent<TMP_Text>();  
     }
 
     // Update is called once per frame
@@ -30,10 +35,39 @@ public class TextRenderScript : MonoBehaviour
         switch (option)
         {
             case Opsi.curTimeLimit:
-                textObj.text = formatTime(GameManager.turnCounter);
+                if(GameManager.turnState == GameManager.TurnState.Player1)
+                {
+                    textObj.text = ((int)GameManager.Instance.Player1.turnTimeLeft).ToString("00");
+                }else if (GameManager.turnState == GameManager.TurnState.Player2)
+                {
+                    textObj.text = ((int)GameManager.Instance.Player2.turnTimeLeft).ToString("00");
+                }
+                else
+                {
+                    textObj.text = "";
+                }
+
                 break;
             case Opsi.turnCounter:
                 textObj.text = GameManager.turnCounter.ToString("0");
+                break;
+            case Opsi.username1:
+                textObj.text = GameManager.Instance.Player1.username;
+                break;
+            case Opsi.username2:
+                textObj.text = GameManager.Instance.Player2.username;
+                break;
+            case Opsi.turnState:
+                textObj.text = GameManager.turnState.ToString();
+                break;
+            case Opsi.winner:
+                textObj.text = GameManager.winner.ToString();
+                break;
+            case Opsi.scorePlayer1:
+                textObj.text = ((int)GameManager.Instance.Player1.score).ToString("00");
+                break;
+            case Opsi.scorePlayer2:
+                textObj.text = ((int)GameManager.Instance.Player1.score).ToString("00");
                 break;
             default:
                 Debug.Log("Option hasn't defined yet");

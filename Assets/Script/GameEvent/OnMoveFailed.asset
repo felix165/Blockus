@@ -10,5 +10,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 495fd2d1c4d7c2e4ab5a46185f270f96, type: 3}
-  m_Name: OnMouseFailed
+  m_Name: OnMoveFailed
   m_EditorClassIdentifier: 

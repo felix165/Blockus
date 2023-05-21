@@ -268,6 +268,7 @@ GameObject:
   - component: {fileID: 7015239470990860412}
   - component: {fileID: 7042002775322293380}
   - component: {fileID: 8258481051013086381}
+  - component: {fileID: 1518363313}
   m_Layer: 0
   m_Name: SoundManager
   m_TagString: Untagged
@@ -309,6 +310,7 @@ MonoBehaviour:
   sfxSound: []
   musicSource: {fileID: 4606535698428261764}
   sfxSource: {fileID: 4606535699483481090}
+  bgSoundSource: {fileID: 8140871334751173293}
 --- !u!114 &7042002775322293380
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -321,10 +323,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53484329cf2b6f94585922e6061e4502, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 0}
+  Event: {fileID: 11400000, guid: db4b8b8d9e863004c820f7621bf56f71, type: 2}
   Response:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7015239470990860412}
+        m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
+        m_MethodName: PlaySFX
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &8258481051013086381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -337,10 +351,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53484329cf2b6f94585922e6061e4502, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 0}
+  Event: {fileID: 11400000, guid: ccc92d03d30296a41bb1d177b275c8a7, type: 2}
   Response:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7015239470990860412}
+        m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
+        m_MethodName: PlaySFX
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1518363313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4606535698697086687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53484329cf2b6f94585922e6061e4502, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: af87639e773baab4caeba7de3d88c7de, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7015239470990860412}
+        m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
+        m_MethodName: PlaySFX
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4606535699483481091
 GameObject:
   m_ObjectHideFlags: 0
