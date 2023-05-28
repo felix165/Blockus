@@ -37,10 +37,11 @@ public class TextRenderScript : MonoBehaviour
             case Opsi.curTimeLimit:
                 if(GameManager.turnState == GameManager.TurnState.Player1)
                 {
-                    textObj.text = ((int)GameManager.Instance.Player1.turnTimeLeft).ToString("00");
+                    textObj.text = formatTime((int)GameManager.Instance.blokusManager.playerList[0].TotalTimeLeft);
+                        //Player1.turnTimeLeft).ToString("00");
                 }else if (GameManager.turnState == GameManager.TurnState.Player2)
                 {
-                    textObj.text = ((int)GameManager.Instance.Player2.turnTimeLeft).ToString("00");
+                    textObj.text = formatTime((int)GameManager.Instance.blokusManager.playerList[1].TotalTimeLeft);
                 }
                 else
                 {
@@ -52,10 +53,10 @@ public class TextRenderScript : MonoBehaviour
                 textObj.text = GameManager.turnCounter.ToString("0");
                 break;
             case Opsi.username1:
-                textObj.text = GameManager.Instance.Player1.username;
+                textObj.text = GameManager.Instance.blokusManager.playerList[0].Name;
                 break;
             case Opsi.username2:
-                textObj.text = GameManager.Instance.Player2.username;
+                textObj.text = GameManager.Instance.blokusManager.playerList[1].Name;
                 break;
             case Opsi.turnState:
                 textObj.text = GameManager.turnState.ToString();
@@ -64,10 +65,10 @@ public class TextRenderScript : MonoBehaviour
                 textObj.text = GameManager.winner.ToString();
                 break;
             case Opsi.scorePlayer1:
-                textObj.text = ((int)GameManager.Instance.Player1.score).ToString("00");
+                textObj.text = ((int)GameManager.Instance.blokusManager.playerList[0].Score).ToString("00");
                 break;
             case Opsi.scorePlayer2:
-                textObj.text = ((int)GameManager.Instance.Player1.score).ToString("00");
+                textObj.text = ((int)GameManager.Instance.blokusManager.playerList[1].Score).ToString("00");
                 break;
             default:
                 Debug.Log("Option hasn't defined yet");

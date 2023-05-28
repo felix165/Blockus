@@ -1,3 +1,4 @@
+using Assets;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -38,21 +39,23 @@ public class GameManager : MonoBehaviour
     }
 
     public static GameManager Instance;
-    public float turnTimeLimit = 60f;
+    public float playerTimeTotal = 300f;
     public static int turnCounter;
 
     public static Winner winner;
     public static TurnState turnState;
 
-    public SOPlayer Player1= null;
-    public SOPlayer Player2= null;
-    public tile[] tiles= null;
+   /* public SOPlayer Player1= null;
+    public SOPlayer Player2= null;*/
+    public Blokus blokusManager;
 
+    private bool gameStart = false;
     public static bool isGameOver = false;
     public static bool isGamePause = false;
 
     public UnityEvent player1Turn;
     public UnityEvent player2Turn;
+
 
     GameData gameData = new GameData() //saved data
     {
@@ -77,16 +80,14 @@ public class GameManager : MonoBehaviour
     //NewGame
     public void NewGame()
     {
-        Player1.resetPlayer(tiles, "player1");
-        Player2.resetPlayer(tiles, "player2");
+
         isGameOver = false;
         winner = Winner.Tie;
         turnCounter = 1;
         turnState = TurnState.Player1;
-        Player1.turnStart(turnTimeLimit);
         player1Turn?.Invoke();
-        gameData.Player1 = Player1;
-        gameData.Player2 = Player2;
+/*        gameData.Player1 = Player1;
+        gameData.Player2 = Player2;*/
         SoundManager.Instance.PlaySFX("NextLevel");
         //SceneManager.LoadScene("Arena");
     }
@@ -97,10 +98,22 @@ public class GameManager : MonoBehaviour
         switch (turnState)
         {
             case TurnState.Player1:
-                Player1.update();
+                blokusManager.playerList[0].TotalTimeLeft -= Time.deltaTime;
+                if(blokusManager.playerList[0].TotalTimeLeft <= 0)
+                {
+                    blokusManager.timeOut();
+                    turnState = TurnState.GameOver;
+                    isGameOver = true;
+                }
                 break;
             case TurnState.Player2:
-                Player2.update();
+                blokusManager.playerList[1].TotalTimeLeft -= Time.deltaTime;
+                if (blokusManager.playerList[1].TotalTimeLeft <= 0)
+                {
+                    blokusManager.timeOut();
+                    turnState = TurnState.GameOver;
+                    isGameOver = true;
+                }
                 break;
         }
     }
@@ -151,70 +164,15 @@ public class GameManager : MonoBehaviour
 
     public void nextTurn()
     {
-        if (Player1.tiles.Length > 0 || Player2.tiles.Length > 0)
+        blokusManager.nextTurn();
+        int currentIndex = blokusManager.playerList.IndexOf(blokusManager.currentPlayer);
+        if(currentIndex == 0)
         {
-            turnCounter++;
-            switch (turnState)
-            {
-                case TurnState.Player1:
-                    if (Player2.tiles.Length > 0)
-                    {
-                        player2Turn?.Invoke();
-                        Player2.turnStart(turnTimeLimit);
-                        turnState = TurnState.Player2;
-                    }
-                    else
-                    {
-                        player1Turn?.Invoke();
-                        Player1.turnStart(turnTimeLimit);
-                        turnState = TurnState.Player1;
-                    }
-                    break;
-                case TurnState.Player2:
-                    if (Player1.tiles.Length > 0)
-                    {
-                        player1Turn?.Invoke();
-                        Player1.turnStart(turnTimeLimit);
-                        turnState = TurnState.Player1;
-                    }
-                    else
-                    {
-                        player2Turn?.Invoke();
-                        Player2.turnStart(turnTimeLimit);
-                        turnState = TurnState.Player1;
-                    }
-                    break;
-            }
-        }
-        else
+            turnState = TurnState.Player1;
+        }else if (currentIndex == 1)
         {
-            turnState = TurnState.GameOver;
-            if (Player1.score > Player2.score)
-            {
-                winner = Winner.Player1;
-            }
-            else if (Player1.score < Player2.score)
-            {
-                winner = Winner.Player2;
-            }
-            else
-            {
-                if (Player1.totalTimeNeeded > Player2.totalTimeNeeded)
-                {
-                    winner = Winner.Player2;
-                }
-                else if (Player2.totalTimeNeeded > Player1.totalTimeNeeded)
-                {
-                    winner = Winner.Player1;
-                }
-                else
-                {
-                    winner = Winner.Tie;
-                }
-            }
-            GameOver();
+            turnState = TurnState.Player2;
         }
-
     }
 
     #region pause
