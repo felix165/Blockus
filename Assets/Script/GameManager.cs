@@ -2,19 +2,19 @@ using Assets;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     [Serializable]
     public class GameData
     {
-        public SOPlayer Player1;
-        public SOPlayer Player2;
         public Winner winner;
         public string description;
     }
@@ -39,28 +39,22 @@ public class GameManager : MonoBehaviour
     }
 
     public static GameManager Instance;
-    public float playerTimeTotal = 300f;
     public static int turnCounter;
-
     public static Winner winner;
     public static TurnState turnState;
-
-   /* public SOPlayer Player1= null;
-    public SOPlayer Player2= null;*/
-    public Blokus blokusManager;
-
-    private bool gameStart = false;
-    public static bool isGameOver = false;
     public static bool isGamePause = false;
 
-    public UnityEvent player1Turn;
-    public UnityEvent player2Turn;
+    public Blokus blokusManager;
+    public float playerTimeTotal = 300f;
+
+    [HideInInspector]
+    public string usernamePlayer1 = "Player1";
+    [HideInInspector]
+    public string usernamePlayer2 = "Player2";
 
 
     GameData gameData = new GameData() //saved data
     {
-        Player1 = null,
-        Player2 = null,
         winner = Winner.Tie,
         description = ""
     };
@@ -71,51 +65,48 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if(SceneManager.GetActiveScene().name == "Lix")
+        if(SceneManager.GetActiveScene().name == "Arena")
         {
+            /**/
+            Debug.Log("Arena");
             NewGame();
         }
-
     }
     //NewGame
     public void NewGame()
     {
-
-        isGameOver = false;
+        
+        
         winner = Winner.Tie;
         turnCounter = 1;
         turnState = TurnState.Player1;
-        player1Turn?.Invoke();
-/*        gameData.Player1 = Player1;
-        gameData.Player2 = Player2;*/
-        SoundManager.Instance.PlaySFX("NextLevel");
-        //SceneManager.LoadScene("Arena");
+        setPlayerName(usernamePlayer1, usernamePlayer2);
+        blokusManager.newGame();
+        SceneManager.LoadScene("Arena");
+    }
+
+    public void setPlayerName(string player1 = "Player1", string player2 = "Player2")
+    {
+        List<Player> playersList = new List<Player>();
+        BlokusColor color = (BlokusColor.Player1 - DropdownColor.VALUE_CORRECTION);
+        Player newPlayer = new Player(color, player1);
+        newPlayer.TotalTimeLeft= playerTimeTotal;
+        playersList.Add(newPlayer);
+        
+
+        color = (BlokusColor.Player2 - DropdownColor.VALUE_CORRECTION);
+        newPlayer = new Player(color, player2);
+        newPlayer.TotalTimeLeft = playerTimeTotal;
+        playersList.Add(newPlayer);
+
+
+        PlayerList.Players = playersList;
     }
 
     // Update is called once per frame
     void Update()
     {
-        switch (turnState)
-        {
-            case TurnState.Player1:
-                blokusManager.playerList[0].TotalTimeLeft -= Time.deltaTime;
-                if(blokusManager.playerList[0].TotalTimeLeft <= 0)
-                {
-                    blokusManager.timeOut();
-                    turnState = TurnState.GameOver;
-                    isGameOver = true;
-                }
-                break;
-            case TurnState.Player2:
-                blokusManager.playerList[1].TotalTimeLeft -= Time.deltaTime;
-                if (blokusManager.playerList[1].TotalTimeLeft <= 0)
-                {
-                    blokusManager.timeOut();
-                    turnState = TurnState.GameOver;
-                    isGameOver = true;
-                }
-                break;
-        }
+
     }
 
     public void LoadMainMenuScene()
@@ -142,6 +133,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void GameOver()
     {
+        turnState = TurnState.GameOver;
         Debug.Log("gameover");
         switch (winner)
         {
@@ -156,22 +148,30 @@ public class GameManager : MonoBehaviour
         Debug.Log(winner + " is the winner");
     }
 
-    public void OutOfTime()
-    {
-        SoundManager.Instance.PlaySFX("OutOfTime");
-        nextTurn();
-    }
-
     public void nextTurn()
     {
-        blokusManager.nextTurn();
         int currentIndex = blokusManager.playerList.IndexOf(blokusManager.currentPlayer);
         if(currentIndex == 0)
         {
+            Debug.Log("Player1");
             turnState = TurnState.Player1;
         }else if (currentIndex == 1)
         {
+            Debug.Log("Player2");
             turnState = TurnState.Player2;
+        }
+    }
+    public void setWinnerState(int state)
+    {
+        if(state == 0)
+        {
+            winner = Winner.Tie;
+        }else if (state == 1)
+        {
+            winner = Winner.Player1;
+        }else if (state == 2)
+        {
+            winner = Winner.Player2;
         }
     }
 
