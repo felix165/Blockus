@@ -75,26 +75,29 @@ public class GameManager : MonoBehaviour
     //NewGame
     public void NewGame()
     {
-        
-        
+        setPlayerName(usernamePlayer1, usernamePlayer2);
+        blokusManager.newGame();
         winner = Winner.Tie;
         turnCounter = 1;
         turnState = TurnState.Player1;
-        setPlayerName(usernamePlayer1, usernamePlayer2);
-        blokusManager.newGame();
-        SceneManager.LoadScene("Arena");
+
+        foreach (Player p in blokusManager.playerList)
+        {
+            p.TotalTimeLeft = playerTimeTotal;
+        }
+        //SceneManager.LoadScene("Arena");
     }
 
     public void setPlayerName(string player1 = "Player1", string player2 = "Player2")
     {
         List<Player> playersList = new List<Player>();
-        BlokusColor color = (BlokusColor.Player1 - DropdownColor.VALUE_CORRECTION);
+        BlokusColor color = (BlokusColor)(0 - DropdownColor.VALUE_CORRECTION);
         Player newPlayer = new Player(color, player1);
-        newPlayer.TotalTimeLeft= playerTimeTotal;
+        newPlayer.TotalTimeLeft = playerTimeTotal;
         playersList.Add(newPlayer);
-        
 
-        color = (BlokusColor.Player2 - DropdownColor.VALUE_CORRECTION);
+
+        color = (BlokusColor)(1 - DropdownColor.VALUE_CORRECTION);
         newPlayer = new Player(color, player2);
         newPlayer.TotalTimeLeft = playerTimeTotal;
         playersList.Add(newPlayer);

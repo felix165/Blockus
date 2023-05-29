@@ -75,10 +75,10 @@ public class Blokus : MonoBehaviour
                 return Player1Block;
             case BlokusColor.Player2:
                 return Player2Block;
-            /*            case BlokusColor.RED:
-                            return RedBlock;
-                        case BlokusColor.YELLOW:
-                            return YellowBlock;*/
+            /*case BlokusColor.RED:
+                return RedBlock;
+              case BlokusColor.YELLOW:
+                return YellowBlock;*/
             default:
                 return null;
         }
@@ -91,7 +91,6 @@ public class Blokus : MonoBehaviour
     }
     public void newGame()
     {
-        Debug.Log("New Game");
         randomPlayerBlock();
         TileBase tile;
         int actualTile;
@@ -167,7 +166,6 @@ public class Blokus : MonoBehaviour
 
         MainTilemap.SetTile(START_POSITION_RED, Player2Block);
         BlokusMap[START_POSITION_RED.x, START_POSITION_RED.y] = Player2_Tile;
-
         DisplayPiecesOfPlayer(currentPlayer);
     }
 
@@ -227,22 +225,6 @@ public class Blokus : MonoBehaviour
 
     void updateTime()
     {
-        playerList = PlayerList.Players;
-        Debug.Log("Count:" + playerList.Count);
-        Debug.Log("playlist: " + PlayerList.Players.Count);
-        Debug.Log(currentPlayer);
-        if(currentPlayer == null)
-        {
-            Debug.Log("true null");
-        }
-        else
-        {
-            Debug.Log("not null");
-        }
-        Debug.Log("Index:" + playerList.IndexOf(currentPlayer));
-
-        Debug.Log("Cur: " + currentPlayer.Name);
-
 
         currentPlayer.TotalTimeLeft -= Time.deltaTime;
         GameObject currentPlayerInfo;
@@ -257,7 +239,6 @@ public class Blokus : MonoBehaviour
             currentPlayer.IsTimeOut = true;
             nextTurn();
         }
-        Debug.Log(currentPlayer + "help");
     }
 
     string formatTime(float time)
@@ -507,7 +488,7 @@ public class Blokus : MonoBehaviour
 
     private void DisplayPiecesOfPlayer(Player player)
     {
-        Debug.Log("Display Piece" + player.Name + player.Pieces.Count);
+/*        Debug.Log("Display Piece" + player.Name + player.Pieces.Count);*/
         foreach (GameObject pieces in currentDisplayedPieces)
         {
             Destroy(pieces);
