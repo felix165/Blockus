@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 
 public class Blokus : MonoBehaviour
@@ -67,6 +68,9 @@ public class Blokus : MonoBehaviour
     private Piece currentPiece;
     private bool gameIsFinished = false;
 
+    public UnityEvent onMoveSuccess;
+    public UnityEvent onMoveFailed;
+    public UnityEvent onMouseClicked;
     private TileBase GetTileOfPlayer(Player player)
     {
         switch (player.Color)
@@ -198,6 +202,7 @@ public class Blokus : MonoBehaviour
 
                 if (currentPiece != null)
                 {
+                    
                     selectedPieceMap = currentPiece.PieceForm;
                     // Replace the value of the selected piece with the value of current player
                     for (int x = 0; x <= selectedPieceMap.GetUpperBound(0); x++)
@@ -206,6 +211,7 @@ public class Blokus : MonoBehaviour
                         {
                             if (selectedPieceMap[x, y] != 0)
                             {
+                                onMouseClicked?.Invoke();
                                 selectedPieceMap[x, y] = (int)currentPlayer.Color;
                             }
                         }
@@ -325,6 +331,7 @@ public class Blokus : MonoBehaviour
                         }
                     }
                 }
+                onMoveSuccess?.Invoke();
                 int currentIndex = playerList.IndexOf(currentPlayer);
                 GameObject currentPlayerInfo = playerInfoList[currentIndex];
                 TextMeshProUGUI currentPlayerScore = currentPlayerInfo.transform.Find(PLAYER_INFO_SCORE_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
@@ -395,7 +402,13 @@ public class Blokus : MonoBehaviour
                         if (currentCoord.x >= NB_COL || currentCoord.y >= NB_ROW ||
                            (pieceForm[x, y] != 0 && BlokusMap[currentCoord.x, currentCoord.y] != GROUND_TILE))
                         {
-                            if (displayLogs) Debug.Log("No space available");
+
+                            if (displayLogs) 
+                            {
+                                onMoveFailed?.Invoke();
+                                Debug.Log("No space available");
+                            }
+                            
                             return false;
                         }
 
@@ -407,7 +420,13 @@ public class Blokus : MonoBehaviour
                                 BlokusMap[currentCoord.x - 1, currentCoord.y] == (int)player.Color ||
                                 BlokusMap[currentCoord.x, currentCoord.y - 1] == (int)player.Color)
                             {
-                                if (displayLogs) Debug.Log("Can't place the piece next to another one of the same player");
+                                
+                                if (displayLogs)
+                                {
+                                    onMoveFailed?.Invoke();
+                                    Debug.Log("Can't place the piece next to another one of the same player");
+                                }
+                                
                                 return false;
                             }
 
@@ -424,7 +443,12 @@ public class Blokus : MonoBehaviour
                 }
             }
 
-            if (displayLogs && !pieceConnected) Debug.Log("Piece not connected");
+            if (displayLogs && !pieceConnected)
+            {
+                onMoveFailed?.Invoke();
+                Debug.Log("Piece not connected");
+            }
+                
 
             return pieceConnected;
         }
@@ -588,28 +612,22 @@ public class Blokus : MonoBehaviour
         // TODO: create options to configure shortcuts
         if (selectedPieceMap != null)
         {
+            if (Input.GetMouseButtonDown(1))
+            {
+                selectedPieceMap = MatriceManager.RotateMatrice(selectedPieceMap, true);
+            }else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow)|| Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S))
+            {
+                selectedPieceMap = MatriceManager.ReverseMatrice(selectedPieceMap);
+            }
+
             // Rotate
-            if (Input.GetKeyDown(KeyCode.RightArrow))
+            else if (Input.GetKeyDown(KeyCode.RightArrow)|| Input.GetKeyDown(KeyCode.A))
             {
                 selectedPieceMap = MatriceManager.RotateMatrice(selectedPieceMap, true);
             }
-            else if (Input.GetKeyDown(KeyCode.LeftArrow))
+            else if (Input.GetKeyDown(KeyCode.LeftArrow)|| Input.GetKeyDown(KeyCode.D))
             {
                 selectedPieceMap = MatriceManager.RotateMatrice(selectedPieceMap, false);
-            }
-            else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                selectedPieceMap = MatriceManager.RotateMatrice(selectedPieceMap, true, 2);
-            }
-            // Reverse
-            else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
-            {
-                selectedPieceMap = MatriceManager.ReverseMatrice(selectedPieceMap);
-                selectedPieceMap = MatriceManager.RotateMatrice(selectedPieceMap, true, 2);
-            }
-            else if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S))
-            {
-                selectedPieceMap = MatriceManager.ReverseMatrice(selectedPieceMap);
             }
         }
     }

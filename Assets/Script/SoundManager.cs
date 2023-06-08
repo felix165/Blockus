@@ -99,7 +99,7 @@ public class SoundManager : MonoBehaviour
 
         if(deltaTime <= 0)
         {
-            PlayBGSound("SeaSound");
+            PlayBGSound("BGSFX");
             deltaTime = bgSoundDelay;
         }
         else

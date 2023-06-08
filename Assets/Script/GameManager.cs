@@ -52,6 +52,13 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public string usernamePlayer2 = "Player2";
 
+    public static string profileName = "";
+
+    public TMP_Text p1;
+    public TMP_Text p2;
+    CloudSave cloudSave;
+    private int saveCount = 0;
+
 
     GameData gameData = new GameData() //saved data
     {
@@ -59,7 +66,20 @@ public class GameManager : MonoBehaviour
         description = ""
     };
 
-
+    public void onUsernamePlayer1Change(string username = "Player1")
+    {
+        usernamePlayer1 = username;
+        setProfileName();
+    }
+    public void onUsernamePlayer2Change(string username = "Player2")
+    {
+        usernamePlayer2 = username;
+        setProfileName();
+    }
+    public void setProfileName()
+    {
+        profileName = usernamePlayer1 + "-VS-" + usernamePlayer2;
+    }
     /* CloudSave cloudSave;*/ //id player = username1 + username2
 
     // Start is called before the first frame update
@@ -71,6 +91,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("Arena");
             NewGame();
         }
+        cloudSave = this.gameObject.GetComponent<CloudSave>();
     }
     //NewGame
     public void NewGame()
@@ -209,16 +230,24 @@ public class GameManager : MonoBehaviour
 
     public void QuitGame()
     {
-        //cloudSave.OnClickSignOut();
-        Application.Quit();
+        if(cloudSave != true)
+        {
+            cloudSave = this.gameObject.GetComponent<CloudSave>();  
+        }
+        if (cloudSave == true)
+        {
+            cloudSave.OnClickSignOut();
+            Application.Quit();
+        }
     }
-    /*public void updateName(TMP_InputField text)
+    public void updateName(TMP_InputField text, TMP_InputField text2)
     {
         if (cloudSave == null)
         {
             cloudSave = this.gameObject.GetComponent<CloudSave>();
         }
-        username = text.text;
+        onUsernamePlayer1Change(text.text);
+        onUsernamePlayer2Change(text2.text);
         cloudSave.OnClickSwitchProfile();
     }
 
@@ -232,10 +261,9 @@ public class GameManager : MonoBehaviour
     }
     public async void saveData()
     {
-        playerData.timeLeft = timeLeft;
-        playerData.username = username;
-        await cloudSave.ForceSaveObjectData($"Save_{saveCount}", playerData);
-    }*/
+        gameData.description = profileName;
+        await cloudSave.ForceSaveObjectData($"Save_{saveCount}_", gameData);
+    }
 
     void Awake()
     {
