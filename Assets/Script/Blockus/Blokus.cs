@@ -482,11 +482,11 @@ public class Blokus : MonoBehaviour
             }
             else
             {
-                if (currentPlayer.IsTimeOut == true)
+                if (currentPlayer.IsSurrender == true)
                 {
                     currentPlayerStatus.text = "SURRENDER...";
                 }
-                else if (currentPlayer.IsSurrender == true)
+                else if (currentPlayer.IsTimeOut == true)
                 {
                     currentPlayerStatus.text = "TIME OUT...";
                 }

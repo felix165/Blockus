@@ -170,6 +170,7 @@ public class GameManager : MonoBehaviour
         }
         gameData.winner = winner;
         Debug.Log(winner + " is the winner");
+        SceneManager.LoadScene("GameOver");
     }
 
     public void nextTurn()
