@@ -1008,7 +1008,7 @@ GameObject:
   - component: {fileID: 6847334686131125130}
   - component: {fileID: 6847334686131125129}
   m_Layer: 5
-  m_Name: SoundSlider
+  m_Name: BGMSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1997,6 +1997,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6847334686975974296}
+  - component: {fileID: 1355287528353002004}
   m_Layer: 5
   m_Name: Options Window
   m_TagString: Untagged
@@ -2028,3 +2029,17 @@ RectTransform:
   m_AnchoredPosition: {x: 42, y: 49.083603}
   m_SizeDelta: {x: 1415.4977, y: 929.33044}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1355287528353002004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6847334686975974297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8aadf4094580cc947830a8f252dcac49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bgm: {fileID: 6847334686131125129}
+  sfx: {fileID: 6847334685790019616}

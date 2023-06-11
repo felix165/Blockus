@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1232030698940085569}
   - component: {fileID: 1232030698940085568}
+  - component: {fileID: 2450308416767124553}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -44,37 +45,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f045c18f80140134fac3bdd73da4b4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnTimeLimit: 60
-  Player1: {fileID: 11400000, guid: 89804f671d6553548b58c3e88a8e377a, type: 2}
-  Player2: {fileID: 11400000, guid: a6af4cd696ed53d4680607c9b26c0efb, type: 2}
-  tiles: []
-  player1Turn:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: e99b571f3b0b5ee4eaaee533212faffa, type: 2}
-        m_TargetAssemblyTypeName: GameEvent, Assembly-CSharp
-        m_MethodName: Raise
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  player2Turn:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 12d651cfc54b2e847ad6542b67da77db, type: 2}
-        m_TargetAssemblyTypeName: GameEvent, Assembly-CSharp
-        m_MethodName: Raise
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  blokusManager: {fileID: 0}
+  playerTimeTotal: 300
+  usernamePlayer1: felix
+  usernamePlayer2: ivann
+--- !u!114 &2450308416767124553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1232030698940085571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692027a15d9f3049bfe04d078485768, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

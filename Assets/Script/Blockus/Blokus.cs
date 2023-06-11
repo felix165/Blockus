@@ -21,7 +21,7 @@ public class Blokus : MonoBehaviour
     //Untuk Player Infor
     private const float PLAYER_INFO_START_POS_X = -2f;
     private const float PLAYER_INFO_START_POS_Y = 0f;
-    private const float PLAYER_INFO_Y_SPACING_MULTIPLIER = 2.5f;
+    private const float PLAYER_INFO_Y_SPACING_MULTIPLIER = 3f;
     private const float PLAYER_INFO_SCALE = 1;
 
     public Grid MainGrid;
@@ -61,7 +61,7 @@ public class Blokus : MonoBehaviour
 
     private List<GameObject> currentDisplayedPieces = new List<GameObject>();
     [HideInInspector]
-    public List<Player> playerList = new List<Player>();
+    public static List<Player> playerList = new List<Player>();
     private List<GameObject> playerInfoList = new List<GameObject>();
     [HideInInspector]
     public Player currentPlayer;
@@ -87,11 +87,24 @@ public class Blokus : MonoBehaviour
                 return null;
         }
     }
-
+    public void Awake()
+    {
+        
+    }
     // Use this for initialization
     public void Start()
     {
-
+        newGame();
+        foreach (Player p in playerList)
+        {
+            if(GameManager.Instance == null)
+            {
+                print("gameManagerNotFound");
+            }
+            p.TotalTimeLeft = GameManager.Instance.playerTimeTotal;
+        }
+        GameManager.Instance.generateUniqueID();
+        GameManager.Instance.saveData();
     }
     public void newGame()
     {
@@ -110,8 +123,8 @@ public class Blokus : MonoBehaviour
             Vector3 pos = new Vector3(x, y);
             Player p = playerList[i];
             GameObject playerInfo = Instantiate(PlayerInfo);
-            TextMeshProUGUI playerName = playerInfo.transform.Find(PLAYER_INFO_NAME_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
-            TextMeshProUGUI playerStatus = playerInfo.transform.Find(PLAYER_INFO_STATUS_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
+            TextMeshProUGUI playerName = playerInfo.transform.Find("PlayerInfo Child").Find(PLAYER_INFO_NAME_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
+            TextMeshProUGUI playerStatus = playerInfo.transform.Find("PlayerInfo Child").Find(PLAYER_INFO_STATUS_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
 
             playerInfoList.Add(playerInfo);
             playerName.text = p.Name;
@@ -119,7 +132,7 @@ public class Blokus : MonoBehaviour
             playerInfo.transform.position = pos;
             playerInfo.transform.localScale = new Vector3(PLAYER_INFO_SCALE, PLAYER_INFO_SCALE, PLAYER_INFO_SCALE);
 
-            foreach (TextMeshProUGUI text in playerInfo.GetComponentsInChildren<TextMeshProUGUI>())
+            /*foreach (TextMeshProUGUI text in playerInfo.GetComponentsInChildren<TextMeshProUGUI>())
             {
                 switch (p.Color)
                 {
@@ -132,16 +145,21 @@ public class Blokus : MonoBehaviour
                     default:
                         break;
                 }
-            }
-
+            }*/
+            playerStatus.text = "";
             if (i == 0)
             {
                 playerStatus.text = STATUS_PLAYING;
                 playerStatus.enabled = true;
             }
         }
+        ListPlayerInfo.transform.localPosition = new Vector3(451, 200, 0);
 
         currentPlayer = playerList[0];
+        if(currentPlayer == null)
+        {
+            print("currentPlayerNotSetYet");
+        }
 
         // Create the map
         for (int x = 0; x < NB_COL; x++)
@@ -237,7 +255,7 @@ public class Blokus : MonoBehaviour
         TextMeshProUGUI currentPlayerStatus;
         int currentIndex = playerList.IndexOf(currentPlayer);
         currentPlayerInfo = playerInfoList[currentIndex];
-        currentPlayerStatus = currentPlayerInfo.transform.Find(PLAYER_INFO_STATUS_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
+        currentPlayerStatus = currentPlayerInfo.transform.Find("PlayerInfo Child").Find(PLAYER_INFO_STATUS_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
         currentPlayerStatus.enabled = true;
         currentPlayerStatus.text = formatTime(currentPlayer.TotalTimeLeft);
         if (currentPlayer.TotalTimeLeft <= 0)
@@ -334,7 +352,7 @@ public class Blokus : MonoBehaviour
                 onMoveSuccess?.Invoke();
                 int currentIndex = playerList.IndexOf(currentPlayer);
                 GameObject currentPlayerInfo = playerInfoList[currentIndex];
-                TextMeshProUGUI currentPlayerScore = currentPlayerInfo.transform.Find(PLAYER_INFO_SCORE_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
+                TextMeshProUGUI currentPlayerScore = currentPlayerInfo.transform.Find("PlayerInfo Child").Find(PLAYER_INFO_SCORE_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
 
 
                 generatedScore += blockPlaced;   //bonusScoreMultiplier;
@@ -362,7 +380,7 @@ public class Blokus : MonoBehaviour
             Player p = orderedPlayers[i];
             int playerIndex = playerList.IndexOf(p);
             GameObject playerInfo = playerInfoList[playerIndex];
-            TextMeshProUGUI playerRank = playerInfo.transform.Find(PLAYER_INFO_RANK_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
+            TextMeshProUGUI playerRank = playerInfo.transform.Find("PlayerInfo Child").Find(PLAYER_INFO_RANK_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
 
             int rank;
             if (p.Score == previousScore) {
@@ -474,7 +492,7 @@ public class Blokus : MonoBehaviour
 
             int currentIndex = playerList.IndexOf(currentPlayer);
             currentPlayerInfo = playerInfoList[currentIndex];
-            currentPlayerStatus = currentPlayerInfo.transform.Find(PLAYER_INFO_STATUS_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
+            currentPlayerStatus = currentPlayerInfo.transform.Find("PlayerInfo Child").Find(PLAYER_INFO_STATUS_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
             if (currentPlayer.CanPlay())
             {
                 // Hide the status of the last player if he can stil play
@@ -499,7 +517,7 @@ public class Blokus : MonoBehaviour
             }
 
             currentPlayerInfo = playerInfoList[currentIndex];
-            currentPlayerStatus = currentPlayerInfo.transform.Find(PLAYER_INFO_STATUS_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
+            currentPlayerStatus = currentPlayerInfo.transform.Find("PlayerInfo Child").Find(PLAYER_INFO_STATUS_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
             currentPlayerStatus.enabled = true;
             currentPlayerStatus.text = STATUS_PLAYING;
 
@@ -643,7 +661,7 @@ public class Blokus : MonoBehaviour
             if (p.CanPlay() && SearchAvailableSpace(p) == false)
             {
                 GameObject playerInfo = playerInfoList[i];
-                TextMeshProUGUI playerStatus = playerInfo.transform.Find(PLAYER_INFO_STATUS_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
+                TextMeshProUGUI playerStatus = playerInfo.transform.Find("PlayerInfo Child").Find(PLAYER_INFO_STATUS_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
                 playerStatus.text = STATUS_BLOCKED;
                 playerStatus.enabled = true;
 
@@ -790,7 +808,7 @@ public class Blokus : MonoBehaviour
         if (playerList[0].Score > playerList[1].Score)
         {
             GameObject currentPlayerInfo = playerInfoList[0];
-            TextMeshProUGUI currentPlayerStatus = currentPlayerInfo.transform.Find(PLAYER_INFO_STATUS_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
+            TextMeshProUGUI currentPlayerStatus = currentPlayerInfo.transform.Find("PlayerInfo Child").Find(PLAYER_INFO_STATUS_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
             currentPlayerStatus.enabled = true;
             currentPlayerStatus.text = STATUS_WINNER;
             GameManager.Instance.setWinnerState(1);
@@ -798,7 +816,7 @@ public class Blokus : MonoBehaviour
         else if (playerList[0].Score < playerList[1].Score)
         {
             GameObject currentPlayerInfo = playerInfoList[1];
-            TextMeshProUGUI currentPlayerStatus = currentPlayerInfo.transform.Find(PLAYER_INFO_STATUS_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
+            TextMeshProUGUI currentPlayerStatus = currentPlayerInfo.transform.Find("PlayerInfo Child").Find(PLAYER_INFO_STATUS_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
             currentPlayerStatus.enabled = true;
             currentPlayerStatus.text = STATUS_WINNER;
             GameManager.Instance.setWinnerState(2);
@@ -806,12 +824,12 @@ public class Blokus : MonoBehaviour
         else
         {
             GameObject currentPlayerInfo = playerInfoList[0];
-            TextMeshProUGUI currentPlayerStatus = currentPlayerInfo.transform.Find(PLAYER_INFO_STATUS_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
+            TextMeshProUGUI currentPlayerStatus = currentPlayerInfo.transform.Find("PlayerInfo Child").Find(PLAYER_INFO_STATUS_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
             currentPlayerStatus.enabled = true;
             currentPlayerStatus.text = "TIE..";
 
             currentPlayerInfo = playerInfoList[1];
-            currentPlayerStatus = currentPlayerInfo.transform.Find(PLAYER_INFO_STATUS_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
+            currentPlayerStatus = currentPlayerInfo.transform.Find("PlayerInfo Child").Find(PLAYER_INFO_STATUS_COMPONENT_NAME).GetComponent<TextMeshProUGUI>();
             currentPlayerStatus.enabled = true;
             currentPlayerStatus.text = "TIE..";
             GameManager.Instance.setWinnerState(0);
@@ -832,7 +850,7 @@ public class Blokus : MonoBehaviour
     {
         VerifyGameStatus();
         CheckSpaceForAllPlayers();
-        GameManager.Instance.nextTurn();
+        GameManager.Instance.nextTurn(playerList.IndexOf(currentPlayer));
     }
 
 }

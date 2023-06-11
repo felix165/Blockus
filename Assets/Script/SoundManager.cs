@@ -16,7 +16,7 @@ public class SoundManager : MonoBehaviour
     public static float bgmVolume = 1;
     public static float sfxVolume = 1;
 
-    private float deltaTime =5f;
+    private float deltaTime =10f;
     private float bgSoundDelay = 15f;
     
     
@@ -95,7 +95,7 @@ public class SoundManager : MonoBehaviour
     {
         musicSource.volume = bgmVolume;
         sfxSource.volume = sfxVolume;
-        bgSoundSource.volume = bgmVolume;
+        bgSoundSource.volume = bgmVolume * 0.8f;
 
         if(deltaTime <= 0)
         {

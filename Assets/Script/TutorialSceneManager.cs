@@ -13,6 +13,8 @@ public class TutorialSceneManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        
         BG.sprite = tutorialImage[curPage];
     }
 
@@ -53,7 +55,6 @@ public class TutorialSceneManager : MonoBehaviour
     }
     public void Done()
     {
-
         GameManager.Instance.NewGame();
     }
 

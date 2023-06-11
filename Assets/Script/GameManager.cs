@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -15,7 +17,9 @@ public class GameManager : MonoBehaviour
     [Serializable]
     public class GameData
     {
-        public Winner winner;
+        public int player1Score;
+        public int player2Score;
+        public string winner;
         public string description;
     }
     [Serializable]
@@ -43,43 +47,34 @@ public class GameManager : MonoBehaviour
     public static Winner winner;
     public static TurnState turnState;
     public static bool isGamePause = false;
+    public static bool isInputEnabled = true;
 
     public Blokus blokusManager;
     public float playerTimeTotal = 300f;
 
     [HideInInspector]
-    public string usernamePlayer1 = "Player1";
+    public static string usernamePlayer1 = "Player1";
     [HideInInspector]
-    public string usernamePlayer2 = "Player2";
+    public static string usernamePlayer2 = "Player2";
 
     public static string profileName = "";
 
-    public TMP_Text p1;
-    public TMP_Text p2;
     CloudSave cloudSave;
     private int saveCount = 0;
+    private string saveID = "";
+
+    
 
 
     GameData gameData = new GameData() //saved data
     {
-        winner = Winner.Tie,
+        player1Score= 0,
+        player2Score= 0,
+        winner = Winner.Tie.ToString(),
         description = ""
     };
 
-    public void onUsernamePlayer1Change(string username = "Player1")
-    {
-        usernamePlayer1 = username;
-        setProfileName();
-    }
-    public void onUsernamePlayer2Change(string username = "Player2")
-    {
-        usernamePlayer2 = username;
-        setProfileName();
-    }
-    public void setProfileName()
-    {
-        profileName = usernamePlayer1 + "-VS-" + usernamePlayer2;
-    }
+    
     /* CloudSave cloudSave;*/ //id player = username1 + username2
 
     // Start is called before the first frame update
@@ -96,17 +91,17 @@ public class GameManager : MonoBehaviour
     //NewGame
     public void NewGame()
     {
+        if (cloudSave != true)
+        {
+            cloudSave = this.gameObject.GetComponent<CloudSave>();
+        }
+        print(usernamePlayer1+ " " + usernamePlayer2);
         setPlayerName(usernamePlayer1, usernamePlayer2);
-        blokusManager.newGame();
         winner = Winner.Tie;
         turnCounter = 1;
         turnState = TurnState.Player1;
 
-        foreach (Player p in blokusManager.playerList)
-        {
-            p.TotalTimeLeft = playerTimeTotal;
-        }
-        //SceneManager.LoadScene("Arena");
+        SceneManager.LoadScene(2);
     }
 
     public void setPlayerName(string player1 = "Player1", string player2 = "Player2")
@@ -130,11 +125,22 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            updateSettingWindow();
+        }
     }
 
     public void LoadMainMenuScene()
     {
+        if (cloudSave != true)
+        {
+            cloudSave = this.gameObject.GetComponent<CloudSave>();
+        }
+        if (cloudSave == true)
+        {
+            cloudSave.OnClickSignOut();
+        }
         SceneManager.LoadScene("MainMenu");
     }
 
@@ -145,12 +151,24 @@ public class GameManager : MonoBehaviour
 
     public void LoadTutorialScene()
     {
-        SceneManager.LoadScene("Tutorial");
+        signIn();
+        
+        if (cloudSave == true)
+        {
+            SceneManager.LoadScene("Tutorial");
+        }
+        else
+        {
+            Debug.Log("you haven't sign in yet");
+        }
+        print(usernamePlayer1+ " " + usernamePlayer2);
+
     }
     public void reloadScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
 
     /// <summary>
     /// 
@@ -168,14 +186,13 @@ public class GameManager : MonoBehaviour
                 SoundManager.Instance.PlaySFX("Win");
                 break;
         }
-        gameData.winner = winner;
+        saveData();
         Debug.Log(winner + " is the winner");
         SceneManager.LoadScene("GameOver");
     }
 
-    public void nextTurn()
+    public void nextTurn(int currentIndex)
     {
-        int currentIndex = blokusManager.playerList.IndexOf(blokusManager.currentPlayer);
         if(currentIndex == 0)
         {
             Debug.Log("Player1");
@@ -217,6 +234,7 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0f;
         isGamePause = true;
+        isInputEnabled = false;
         Debug.Log("pause");
 
     }
@@ -224,6 +242,7 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1.0f;
         isGamePause = false;
+        isInputEnabled = true;
         Debug.Log("Resume");
     }
     #endregion
@@ -241,15 +260,27 @@ public class GameManager : MonoBehaviour
             Application.Quit();
         }
     }
-    public void updateName(TMP_InputField text, TMP_InputField text2)
+
+    public void onUsernamePlayer1Change(TMP_InputField text)
+    {
+        usernamePlayer1 = text.text;
+        setProfileName();
+    }
+    public void onUsernamePlayer2Change(TMP_InputField text)
+    {
+        usernamePlayer2 = text.text;
+        setProfileName();
+    }
+    public void setProfileName()
     {
         if (cloudSave == null)
         {
             cloudSave = this.gameObject.GetComponent<CloudSave>();
         }
-        onUsernamePlayer1Change(text.text);
-        onUsernamePlayer2Change(text2.text);
+        profileName = usernamePlayer1 + "-VS-" + usernamePlayer2;
         cloudSave.OnClickSwitchProfile();
+        print(usernamePlayer1+ " " + usernamePlayer2);
+
     }
 
     public void signIn()
@@ -259,15 +290,51 @@ public class GameManager : MonoBehaviour
             cloudSave = this.gameObject.GetComponent<CloudSave>();
         }
         cloudSave.OnClickSignIn();
+        
     }
-    public async void saveData()
+/*    public async void saveData()
     {
+        gameData.player1Score = Blokus.playerList[0].Score;
+        gameData.player2Score = Blokus.playerList[1].Score;
+        gameData.winner = winner.ToString();
         gameData.description = profileName;
         await cloudSave.ForceSaveObjectData($"Save_{saveCount}_", gameData);
+    }*/
+    public async void saveData()
+    {
+        gameData.player1Score = Blokus.playerList[0].Score;
+        gameData.player2Score = Blokus.playerList[1].Score;
+        gameData.winner = winner.ToString();
+        gameData.description = profileName;
+        await cloudSave.ForceSaveObjectData($"Save_{saveID}_", gameData);
+    }
+    public void saveCountCheck()
+    {
+        if (cloudSave == null)
+        {
+            cloudSave = this.gameObject.GetComponent<CloudSave>();
+        }
+        saveCount = cloudSave.KeysCount().Result;
+        print(saveCount);
+    }
+    public void increaseSaveCount()
+    {
+        saveCount++;
+    }
+    public void generateUniqueID()
+    {
+        string newBackstageItemID = System.Guid.NewGuid().ToString();
+        saveID = newBackstageItemID;
     }
 
     void Awake()
     {
+
+        if (cloudSave == null)
+        {
+            cloudSave = this.gameObject.GetComponent<CloudSave>();
+        }
+
         if (Instance != null && Instance != this)
         {
             Destroy(this.gameObject);

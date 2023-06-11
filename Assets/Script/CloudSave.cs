@@ -96,7 +96,7 @@ public class CloudSave : MonoBehaviour
         Debug.Log($"Current Profile: {AuthenticationService.Instance.Profile}");
     }
 
-    public void OnClickSignOut()
+    public async void OnClickSignOut()
     {
         AuthenticationService.Instance.SignOut();
     }
@@ -128,7 +128,7 @@ public class CloudSave : MonoBehaviour
         return default;
     }
 
-    public async Task<int> KeysCount<T>()
+    public async Task<int> KeysCount()
     {
         try
         {
