@@ -8,11 +8,11 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
-  m_EditorHideFlags: 0
+  m_EditorHideFlags: 1
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: crate_08
+  m_Name: crate_48
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 21300000, guid: cb86667bdf3f73849bf4b257a60b6685, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 752e756b14e089c4d8937ed36571a9d7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
