@@ -240,6 +240,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 35950223592404820, guid: 78c18035af5145a47b62758472ad8836, type: 3}
     - target: {fileID: 6850544524539322869, guid: 9f5d0cdc8ffe8cc4280e62c29ceafd58, type: 3}
+      propertyPath: DefaultBlock
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fff14dd63db5ad479461dc875517bed, type: 2}
+    - target: {fileID: 6850544524539322869, guid: 9f5d0cdc8ffe8cc4280e62c29ceafd58, type: 3}
       propertyPath: Blocks.Array.size
       value: 8
       objectReference: {fileID: 0}
