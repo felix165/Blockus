@@ -2,15 +2,9 @@ using Assets;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using UnityEngine.SocialPlatforms.Impl;
-using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
